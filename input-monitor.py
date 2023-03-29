@@ -13,7 +13,7 @@ from tuya_iot import (
     TuyaTokenInfo,
     TUYA_LOGGER
 )
-
+import lightcontrols
 
 TUYA_ENDPOINT = os.environ['TUYA_ENDPOINT']
 TUYA_CLIENTID = os.environ['TUYA_CLIENTID']
@@ -21,16 +21,17 @@ TUYA_SECRET = os.environ['TUYA_SECRET']
 TUYA_USERNAME = os.environ['TUYA_USERNAME']
 TUYA_PASSWORD = os.environ['TUYA_PASSWORD']
 
-DEVICE_ID = "ebc486b72122e60aecjqaw"
+DEVICE_ID = ""
 
-#TUYA_LOGGER.setLevel(logging.DEBUG)
+TUYA_LOGGER.setLevel(logging.DEBUG)
+controller = lightcontrols.LightControls(os.environ['TUYA_ENDPOINT'], os.environ['TUYA_CLIENTID'], os.environ['TUYA_SECRET'], os.environ['TUYA_USERNAME'], os.environ['TUYA_PASSWORD'])
 
 #print(TUYA_ENDPOINT,TUYA_CLIENTID,TUYA_SECRET,DEVICE_ID, TUYA_USERNAME, TUYA_PASSWORD)
 
 def input_handler(command: str):
     print(f"Command entered: {command}")
-    openapi = TuyaOpenAPI(TUYA_ENDPOINT,TUYA_CLIENTID,TUYA_SECRET)
-    result = openapi.connect(TUYA_USERNAME,TUYA_PASSWORD,1,"tuyaSmart")
+    #openapi = TuyaOpenAPI(TUYA_ENDPOINT,TUYA_CLIENTID,TUYA_SECRET)
+    #result = openapi.connect(TUYA_USERNAME,TUYA_PASSWORD,1,"tuyaSmart")
 
     match command:
         case "1":
@@ -38,16 +39,18 @@ def input_handler(command: str):
             #print(result)
             #location = openapi.get('/v1.0/iot-03/locations/ip?ip=your-ip-address')
             #print(location)
-            result = openapi.get(f'/v1.0/iot-03/devices/{DEVICE_ID}/functions')
+            result = controller.openapi.get(f'/v1.0/iot-03/devices/{DEVICE_ID}/functions')
             print(json.dumps(result,indent=4))
 
         case "2":
-            commands = {'commands': [{'code': 'switch_led', 'value': False}]}
-            result = openapi.post(f'/v1.0/iot-03/devices/{DEVICE_ID}/commands', commands)
+            result = controller.led_toggle(DEVICE_ID,False)
+            #commands = {'commands': [{'code': 'switch_led', 'value': False}]}
+            #result = openapi.post(f'/v1.0/iot-03/devices/{DEVICE_ID}/commands', commands)
 
         case "3":
-            commands = {'commands': [{'code': 'switch_led', 'value': True}]}
-            result = openapi.post(f'/v1.0/iot-03/devices/{DEVICE_ID}/commands', commands)
+            result = controller.led_toggle(DEVICE_ID,True)
+            # commands = {'commands': [{'code': 'switch_led', 'value': True}]}
+            # result = openapi.post(f'/v1.0/iot-03/devices/{DEVICE_ID}/commands', commands)
 
         case "4":
             for i in range(1,30):
@@ -55,8 +58,10 @@ def input_handler(command: str):
                     powered_on = False
                 else:
                     powered_on = True
-                commands = {'commands': [{'code': 'switch_led', 'value': powered_on}]}
-                result = openapi.post(f'/v1.0/iot-03/devices/{DEVICE_ID}/commands', commands)
+                
+                result = controller.led_toggle(DEVICE_ID,powered_on)
+                # commands = {'commands': [{'code': 'switch_led', 'value': powered_on}]}
+                # result = openapi.post(f'/v1.0/iot-03/devices/{DEVICE_ID}/commands', commands)
 
 #GET: /v1.0/iot-03/devices/{device_id}/functions
 
