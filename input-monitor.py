@@ -1,6 +1,7 @@
 import json
 import logging
 import os
+from playsound import playsound
 #from env import ENDPOINT, ACCESS_ID, ACCESS_KEY, USERNAME, PASSWORD
 from tuya_iot import (
     TuyaOpenAPI,
@@ -75,6 +76,9 @@ def input_handler(command: str):
                 # commands = {'commands': [{'code': 'switch_led', 'value': powered_on}]}
                 # result = openapi.post(f'/v1.0/iot-03/devices/{DEVICE_ID}/commands', commands)
 
+        case "5":
+            playsound('mp3/thunder-crack-31702.mp3')
+
 #GET: /v1.0/iot-03/devices/{device_id}/functions
 
 def print_commands():
@@ -82,6 +86,7 @@ def print_commands():
     print("2 - Turn device off")
     print("3 - Turn device on")
     print("4 - Flash")
+    print("5 - Play sound")
 
 while True:
     print_commands()
