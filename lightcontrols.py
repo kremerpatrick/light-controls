@@ -36,6 +36,10 @@ class LightControls:
         self.openapi = TuyaOpenAPI(TUYA_ENDPOINT,TUYA_CLIENTID,TUYA_SECRET)
         result = self.openapi.connect(TUYA_USERNAME,TUYA_PASSWORD,1,"tuyaSmart")
 
+    def get_device_status(self, deviceid: str):
+        result = self.openapi.get(f'/v1.0/iot-03/devices/{deviceid}/status')
+        return result
+
     def led_toggle(self,deviceid: str, led_on: bool):
         commands = {'commands': [{'code': 'switch_led', 'value': led_on}]}
         result = self.openapi.post(f'/v1.0/iot-03/devices/{deviceid}/commands', commands)

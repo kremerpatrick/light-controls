@@ -86,8 +86,12 @@ def input_handler(command: str):
             print(filename)
 
         case "6":
-            result = controller.set_color_hsv(DEFAULT_DEVICE_ID,358,100,100)
+            result = controller.set_color_hsv(DEFAULT_DEVICE_ID,358,1000,1000)
             print(result)
+
+        case "7":
+            result = controller.get_device_status(DEFAULT_DEVICE_ID)
+            print(json.dumps(result,indent=4))
 
 #GET: /v1.0/iot-03/devices/{device_id}/functions
 
@@ -98,6 +102,7 @@ def print_commands():
     print("4 - Flash")
     print("5 - Play sound")
     print("6 - Set HSV value")
+    print("7 - Device status")
 
 while True:
     print_commands()
