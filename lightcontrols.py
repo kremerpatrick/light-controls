@@ -37,9 +37,27 @@ class LightControls:
         result = self.openapi.connect(TUYA_USERNAME,TUYA_PASSWORD,1,"tuyaSmart")
 
     def led_toggle(self,deviceid: str, led_on: bool):
-            commands = {'commands': [{'code': 'switch_led', 'value': led_on}]}
-            result = self.openapi.post(f'/v1.0/iot-03/devices/{deviceid}/commands', commands)
-            return result
+        commands = {'commands': [{'code': 'switch_led', 'value': led_on}]}
+        result = self.openapi.post(f'/v1.0/iot-03/devices/{deviceid}/commands', commands)
+        return result
+
+    def set_color_hsv(self, deviceid: str, hue: int, saturation: int, value: int):
+        """Sets a devices color with HSV (Hue, Saturation, Value)"""
+        commands = {
+                    "commands":[
+                        {
+                            "code":"colour_data_v2",
+                            "value":{
+                                "h":hue,
+                                "s":saturation,
+                                "v":value
+                                }
+                        }
+                    ]
+                }
+        result = self.openapi.post(f'/v1.0/iot-03/devices/{deviceid}/commands', commands)
+        return result
+
 
     def get_random_sound(self,sound_category: SoundCategory):
         match sound_category:

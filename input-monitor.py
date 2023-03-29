@@ -53,9 +53,11 @@ def input_handler(command: str):
 
         case "2":
             result = controller.led_toggle(DEFAULT_DEVICE_ID,False)
+            print(result)
 
         case "3":
             result = controller.led_toggle(DEFAULT_DEVICE_ID,True)
+            print(result)
 
         case "4":
             for i in range(1,30):
@@ -83,6 +85,10 @@ def input_handler(command: str):
             filename = controller.get_random_electricity_sound()
             print(filename)
 
+        case "6":
+            result = controller.set_color_hsv(DEFAULT_DEVICE_ID,358,100,100)
+            print(result)
+
 #GET: /v1.0/iot-03/devices/{device_id}/functions
 
 def print_commands():
@@ -91,6 +97,7 @@ def print_commands():
     print("3 - Turn device on")
     print("4 - Flash")
     print("5 - Play sound")
+    print("6 - Set HSV value")
 
 while True:
     print_commands()
