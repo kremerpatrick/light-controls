@@ -1,6 +1,8 @@
 import json
 import logging
 import os
+import sys
+import time
 from playsound import playsound
 #from env import ENDPOINT, ACCESS_ID, ACCESS_KEY, USERNAME, PASSWORD
 from tuya_iot import (
@@ -14,14 +16,17 @@ from tuya_iot import (
     TuyaTokenInfo,
     TUYA_LOGGER
 )
-import lightcontrols
+from lightcontrols import LightControls,SoundCategory
 
-TUYA_ENDPOINT = os.environ['TUYA_ENDPOINT']
-TUYA_CLIENTID = os.environ['TUYA_CLIENTID']
-TUYA_SECRET = os.environ['TUYA_SECRET']
-TUYA_USERNAME = os.environ['TUYA_USERNAME']
-TUYA_PASSWORD = os.environ['TUYA_PASSWORD']
-
+try:
+    TUYA_ENDPOINT = os.environ['TUYA_ENDPOINT']
+    TUYA_CLIENTID = os.environ['TUYA_CLIENTID']
+    TUYA_SECRET = os.environ['TUYA_SECRET']
+    TUYA_USERNAME = os.environ['TUYA_USERNAME']
+    TUYA_PASSWORD = os.environ['TUYA_PASSWORD']
+except KeyError as e:
+    print(f'Missing environment variable: {e}')
+    sys.exit()
 
 device_dict = {
     "MUSIC_ROOM": "",
@@ -33,14 +38,10 @@ device_dict = {
 DEVICE_ID = device_dict["FRONT_DOOR"]
 
 TUYA_LOGGER.setLevel(logging.DEBUG)
-controller = lightcontrols.LightControls(os.environ['TUYA_ENDPOINT'], os.environ['TUYA_CLIENTID'], os.environ['TUYA_SECRET'], os.environ['TUYA_USERNAME'], os.environ['TUYA_PASSWORD'])
-
-#print(TUYA_ENDPOINT,TUYA_CLIENTID,TUYA_SECRET,DEVICE_ID, TUYA_USERNAME, TUYA_PASSWORD)
+controller = LightControls(TUYA_ENDPOINT, TUYA_CLIENTID, TUYA_SECRET, TUYA_USERNAME, TUYA_PASSWORD)
 
 def input_handler(command: str):
     print(f"Command entered: {command}")
-    #openapi = TuyaOpenAPI(TUYA_ENDPOINT,TUYA_CLIENTID,TUYA_SECRET)
-    #result = openapi.connect(TUYA_USERNAME,TUYA_PASSWORD,1,"tuyaSmart")
 
     match command:
         case "1":
@@ -53,13 +54,9 @@ def input_handler(command: str):
 
         case "2":
             result = controller.led_toggle(DEVICE_ID,False)
-            #commands = {'commands': [{'code': 'switch_led', 'value': False}]}
-            #result = openapi.post(f'/v1.0/iot-03/devices/{DEVICE_ID}/commands', commands)
 
         case "3":
             result = controller.led_toggle(DEVICE_ID,True)
-            # commands = {'commands': [{'code': 'switch_led', 'value': True}]}
-            # result = openapi.post(f'/v1.0/iot-03/devices/{DEVICE_ID}/commands', commands)
 
         case "4":
             for i in range(1,30):
@@ -68,16 +65,24 @@ def input_handler(command: str):
                 else:
                     powered_on = True
                 
-                #result = controller.led_toggle(DEVICE_ID,powered_on)
                 result = controller.led_toggle(device_dict["CORNER"],powered_on)
+                playsound(controller.get_random_sound(SoundCategory.ELECTRICITY))
+ 
                 result = controller.led_toggle(device_dict["FRONT_DOOR"],powered_on)
+                playsound(controller.get_random_sound(SoundCategory.ELECTRICITY))
+
                 result = controller.led_toggle(device_dict["OFFICE"],powered_on)
+                playsound(controller.get_random_sound(SoundCategory.ELECTRICITY))
+
                 result = controller.led_toggle(device_dict["MUSIC_ROOM"],powered_on)
-                # commands = {'commands': [{'code': 'switch_led', 'value': powered_on}]}
-                # result = openapi.post(f'/v1.0/iot-03/devices/{DEVICE_ID}/commands', commands)
+                playsound(controller.get_random_sound(SoundCategory.ELECTRICITY))
 
         case "5":
-            playsound('mp3/thunder-crack-31702.mp3')
+            #playsound('mp3/thunder-crack-31702.mp3')
+            #playsound('mp3/electricitysound001.mp3')
+            #playsound('mp3/electricitysound002.mp3')
+            filename = controller.get_random_electricity_sound()
+            print(filename)
 
 #GET: /v1.0/iot-03/devices/{device_id}/functions
 

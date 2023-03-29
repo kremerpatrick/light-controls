@@ -1,5 +1,9 @@
+import glob
 import json
 import logging
+import random
+
+from enum import Enum
 from tuya_iot import (
     TuyaOpenAPI,
     AuthType,
@@ -13,6 +17,12 @@ from tuya_iot import (
 )
 
 TUYA_LOGGER.setLevel(logging.DEBUG)
+
+class SoundCategory(Enum):
+    """Available sound categories"""
+
+    ELECTRICITY = 0
+    THUNDER = 1
 
 class LightControls:
 
@@ -30,3 +40,16 @@ class LightControls:
             commands = {'commands': [{'code': 'switch_led', 'value': led_on}]}
             result = self.openapi.post(f'/v1.0/iot-03/devices/{deviceid}/commands', commands)
             return result
+
+    def get_random_sound(self,sound_category: SoundCategory):
+        match sound_category:
+            case SoundCategory.ELECTRICITY:
+                fnames = 'mp3/electricitysound*.mp3'
+            
+            case SoundCategory.THUNDER:
+                fnames = 'mp3/thundersound*.mp3'
+                
+        filelist = glob.glob(fnames)
+        num_files = len(filelist)
+        random_file = random.randrange(num_files)
+        return filelist[random_file]
