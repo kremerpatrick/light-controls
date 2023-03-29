@@ -45,10 +45,6 @@ def input_handler(command: str):
 
     match command:
         case "1":
-            #result = openapi.connect()
-            #print(result)
-            #location = openapi.get('/v1.0/iot-03/locations/ip?ip=your-ip-address')
-            #print(location)
             result = controller.openapi.get(f'/v1.0/iot-03/devices/{DEVICE_ID}/functions')
             print(json.dumps(result,indent=4))
 
