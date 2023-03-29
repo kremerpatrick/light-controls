@@ -18,6 +18,9 @@ from tuya_iot import (
 )
 from lightcontrols import LightControls,SoundCategory
 
+MIN_PYTHON = (3,10,7)
+assert sys.version_info >= MIN_PYTHON, f"Python {'.'.join([str(n) for n in MIN_PYTHON])} or newer is required."
+
 try:
     TUYA_ENDPOINT = os.environ['TUYA_ENDPOINT']
     TUYA_CLIENTID = os.environ['TUYA_CLIENTID']
@@ -28,14 +31,14 @@ except KeyError as e:
     print(f'Missing environment variable: {e}')
     sys.exit()
 
-device_dict = {
-    "MUSIC_ROOM": "",
-    "FRONT_DOOR": "",
-    "OFFICE": "",
-    "CORNER": ""
-}
+try:
+    with open('devices.json','r') as file:
+        device_dict = json.load(file)
+except Exception as e:
+    print(f'Cound not retrieve devices list: {e}')
+    sys.exit()
 
-DEVICE_ID = device_dict["FRONT_DOOR"]
+DEFAULT_DEVICE_ID = device_dict["FRONT_DOOR"]
 
 TUYA_LOGGER.setLevel(logging.DEBUG)
 controller = LightControls(TUYA_ENDPOINT, TUYA_CLIENTID, TUYA_SECRET, TUYA_USERNAME, TUYA_PASSWORD)
@@ -45,14 +48,14 @@ def input_handler(command: str):
 
     match command:
         case "1":
-            result = controller.openapi.get(f'/v1.0/iot-03/devices/{DEVICE_ID}/functions')
+            result = controller.openapi.get(f'/v1.0/iot-03/devices/{DEFAULT_DEVICE_ID}/functions')
             print(json.dumps(result,indent=4))
 
         case "2":
-            result = controller.led_toggle(DEVICE_ID,False)
+            result = controller.led_toggle(DEFAULT_DEVICE_ID,False)
 
         case "3":
-            result = controller.led_toggle(DEVICE_ID,True)
+            result = controller.led_toggle(DEFAULT_DEVICE_ID,True)
 
         case "4":
             for i in range(1,30):
