@@ -21,7 +21,15 @@ TUYA_SECRET = os.environ['TUYA_SECRET']
 TUYA_USERNAME = os.environ['TUYA_USERNAME']
 TUYA_PASSWORD = os.environ['TUYA_PASSWORD']
 
-DEVICE_ID = ""
+
+device_dict = {
+    "MUSIC_ROOM": "",
+    "FRONT_DOOR": "",
+    "OFFICE": "",
+    "CORNER": ""
+}
+
+DEVICE_ID = device_dict["FRONT_DOOR"]
 
 TUYA_LOGGER.setLevel(logging.DEBUG)
 controller = lightcontrols.LightControls(os.environ['TUYA_ENDPOINT'], os.environ['TUYA_CLIENTID'], os.environ['TUYA_SECRET'], os.environ['TUYA_USERNAME'], os.environ['TUYA_PASSWORD'])
@@ -59,7 +67,11 @@ def input_handler(command: str):
                 else:
                     powered_on = True
                 
-                result = controller.led_toggle(DEVICE_ID,powered_on)
+                #result = controller.led_toggle(DEVICE_ID,powered_on)
+                result = controller.led_toggle(device_dict["CORNER"],powered_on)
+                result = controller.led_toggle(device_dict["FRONT_DOOR"],powered_on)
+                result = controller.led_toggle(device_dict["OFFICE"],powered_on)
+                result = controller.led_toggle(device_dict["MUSIC_ROOM"],powered_on)
                 # commands = {'commands': [{'code': 'switch_led', 'value': powered_on}]}
                 # result = openapi.post(f'/v1.0/iot-03/devices/{DEVICE_ID}/commands', commands)
 
