@@ -16,7 +16,7 @@ from tuya_iot import (
     TUYA_LOGGER
 )
 
-TUYA_LOGGER.setLevel(logging.DEBUG)
+#TUYA_LOGGER.setLevel(logging.DEBUG)
 
 class SoundCategory(Enum):
     """Available sound categories"""

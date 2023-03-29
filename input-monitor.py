@@ -40,7 +40,7 @@ except Exception as e:
 
 DEFAULT_DEVICE_ID = device_dict["FRONT_DOOR"]
 
-TUYA_LOGGER.setLevel(logging.DEBUG)
+#TUYA_LOGGER.setLevel(logging.DEBUG)
 controller = LightControls(TUYA_ENDPOINT, TUYA_CLIENTID, TUYA_SECRET, TUYA_USERNAME, TUYA_PASSWORD)
 
 def input_handler(command: str):
