@@ -21,7 +21,7 @@ TUYA_SECRET = os.environ['TUYA_SECRET']
 TUYA_USERNAME = os.environ['TUYA_USERNAME']
 TUYA_PASSWORD = os.environ['TUYA_PASSWORD']
 
-DEVICE_ID = ""
+DEVICE_ID = "ebc486b72122e60aecjqaw"
 
 #TUYA_LOGGER.setLevel(logging.DEBUG)
 
@@ -49,6 +49,14 @@ def input_handler(command: str):
             commands = {'commands': [{'code': 'switch_led', 'value': True}]}
             result = openapi.post(f'/v1.0/iot-03/devices/{DEVICE_ID}/commands', commands)
 
+        case "4":
+            for i in range(1,30):
+                if i % 2 == 0:
+                    powered_on = False
+                else:
+                    powered_on = True
+                commands = {'commands': [{'code': 'switch_led', 'value': powered_on}]}
+                result = openapi.post(f'/v1.0/iot-03/devices/{DEVICE_ID}/commands', commands)
 
 #GET: /v1.0/iot-03/devices/{device_id}/functions
 
@@ -56,11 +64,12 @@ def print_commands():
     print("1 - Show device functions")
     print("2 - Turn device off")
     print("3 - Turn device on")
+    print("4 - Flash")
 
 while True:
     print_commands()
-    cmd = input('Enter command, q to quit: ')
-    if cmd == "q": break
+    cmd = input('Enter command, x to exit: ')
+    if cmd == "x": break
     input_handler(cmd)
 
 
