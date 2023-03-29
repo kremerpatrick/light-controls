@@ -67,23 +67,28 @@ def input_handler(command: str):
                     powered_on = True
                 
                 result = controller.led_toggle(device_dict["CORNER"],powered_on)
+                print(f'CORNER set to powered on={powered_on}, success={result["success"]}')
                 playsound(controller.get_random_sound(SoundCategory.ELECTRICITY))
  
                 result = controller.led_toggle(device_dict["FRONT_DOOR"],powered_on)
+                print(f'FRONT_DOOR set to powered on={powered_on}, success={result["success"]}')
                 playsound(controller.get_random_sound(SoundCategory.ELECTRICITY))
 
                 result = controller.led_toggle(device_dict["OFFICE"],powered_on)
+                print(f'OFFICE set to powered on={powered_on}, success={result["success"]}')
                 playsound(controller.get_random_sound(SoundCategory.ELECTRICITY))
 
                 result = controller.led_toggle(device_dict["MUSIC_ROOM"],powered_on)
+                print(f'MUSIC_ROOM set to powered on={powered_on}, success={result["success"]}')
                 playsound(controller.get_random_sound(SoundCategory.ELECTRICITY))
 
         case "5":
             #playsound('mp3/thunder-crack-31702.mp3')
             #playsound('mp3/electricitysound001.mp3')
             #playsound('mp3/electricitysound002.mp3')
-            filename = controller.get_random_electricity_sound()
+            filename = controller.get_random_sound(SoundCategory.ELECTRICITY)
             print(filename)
+            playsound(filename)
 
         case "6":
             result = controller.set_color_hsv(DEFAULT_DEVICE_ID,358,1000,1000)
