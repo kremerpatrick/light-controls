@@ -60,6 +60,9 @@ def input_handler(command: str):
 
         case "4":
 
+            success = controller.led_toggle_all(False)
+            success = controller.set_all_devices("white",1000,1000)
+
             try:
                 MAX_LOOP = 3000
                 for i in range(1,MAX_LOOP):
@@ -88,6 +91,11 @@ def input_handler(command: str):
                     # playsound(controller.get_random_sound(SoundCategory.ELECTRICITY))
             except KeyboardInterrupt:
                 print('Ctrl-C detected, exiting loop...')
+                success = controller.led_toggle_all(True)
+                success = controller.set_all_devices("white",1000,0)
+            
+            success = controller.led_toggle_all(True)
+            success = controller.set_all_devices("white",1000,0)
 
         case "5":
             #playsound('mp3/thunder-crack-31702.mp3')
@@ -106,9 +114,12 @@ def input_handler(command: str):
             print(json.dumps(result,indent=4))
 
         case "8":
-            result = controller.set_work_mode(DEFAULT_DEVICE_ID,"white")
-            result = controller.set_bright_value_v2(DEFAULT_DEVICE_ID,1000)
-            result = controller.set_temp_value_v2(DEFAULT_DEVICE_ID,1000)
+            success = controller.led_toggle_all(False)
+            success = controller.set_all_devices("white",1000,1000)
+            # result = controller.set_work_mode(DEFAULT_DEVICE_ID,"white")
+            # result = controller.set_bright_value_v2(DEFAULT_DEVICE_ID,1000)
+            # result = controller.set_temp_value_v2(DEFAULT_DEVICE_ID,1000)
+            
 
 #GET: /v1.0/iot-03/devices/{device_id}/functions
 

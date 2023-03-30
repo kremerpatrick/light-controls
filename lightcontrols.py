@@ -42,7 +42,43 @@ class LightControls:
         result = self.openapi.get(f'/v1.0/iot-03/devices/{deviceid}/status')
         return result
 
+    def led_toggle_all(self, led_on: bool):
+        """Toggle LED status for all devices on or off"""
+
+        all_success = True
+        for deviceid in self.device_dict.values():
+            result = self.led_toggle(deviceid,led_on)
+            if result["success"] == False:
+                print(result)
+                all_success = False
+        return all_success
+
+    def set_all_devices(self, work_mode: str, bright_value: int, temp_value: int, hue: int = None, saturation: int = None, value: int = None):
+        """Set all devices to specified values"""
+
+        all_success = True
+        for deviceid in self.device_dict.values():
+            result = self.set_work_mode(deviceid,work_mode)
+            if result["success"] == False:
+                print(result)
+                all_success = False
+
+            result = self.set_bright_value_v2(deviceid,bright_value)
+            if result["success"] == False:
+                print(result)
+                all_success = False
+
+                
+            result = self.set_temp_value_v2(deviceid,temp_value)
+            if result["success"] == False:
+                print(result)
+                all_success = False
+
+        return all_success
+
+
     def led_toggle(self,deviceid: str, led_on: bool):
+        """Set a device LED status on or off"""
         commands = {'commands': [{'code': 'switch_led', 'value': led_on}]}
         result = self.openapi.post(f'/v1.0/iot-03/devices/{deviceid}/commands', commands)
         return result
