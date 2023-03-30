@@ -65,10 +65,10 @@ def input_handler(command: str):
                 for i in range(1,MAX_LOOP):
                     print(f'Running flash loop. {i}/{MAX_LOOP} Press ^C to exit the loop.')
                     device_name = random.choice(list(controller.device_dict.keys()))
-                    result = controller.led_toggle(controller.device_dict[device_name],False)
+                    result = controller.led_toggle(controller.device_dict[device_name],True)
                     print(f'{device_name} set to powered on={False}, success={result["success"]}')
                     playsound(controller.get_random_sound(SoundCategory.ELECTRICITY))
-                    result = controller.led_toggle(controller.device_dict[device_name],True)
+                    result = controller.led_toggle(controller.device_dict[device_name],False)
                     print(f'{device_name} set to powered on={True}, success={result["success"]}')
 
                     # result = controller.led_toggle(device_dict["CORNER"],powered_on)
@@ -105,6 +105,11 @@ def input_handler(command: str):
             result = controller.get_device_status(DEFAULT_DEVICE_ID)
             print(json.dumps(result,indent=4))
 
+        case "8":
+            result = controller.set_work_mode(DEFAULT_DEVICE_ID,"white")
+            result = controller.set_bright_value_v2(DEFAULT_DEVICE_ID,1000)
+            result = controller.set_temp_value_v2(DEFAULT_DEVICE_ID,1000)
+
 #GET: /v1.0/iot-03/devices/{device_id}/functions
 
 def print_commands():
@@ -115,6 +120,7 @@ def print_commands():
     print("5 - Play sound")
     print("6 - Set HSV value")
     print("7 - Device status")
+    print("8 - Device reset")
 
 while True:
     print_commands()

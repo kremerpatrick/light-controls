@@ -73,6 +73,44 @@ class LightControls:
         result = self.openapi.post(f'/v1.0/iot-03/devices/{deviceid}/commands', commands)
         return result
 
+    def set_bright_value_v2(self, deviceid: str, bright_value: int):
+        """Sets a device brighness"""
+        commands = {
+            "commands":[
+                {
+                    "code":"bright_value_v2",
+                    "value": bright_value
+                }
+            ]
+        }
+        result = self.openapi.post(f'/v1.0/iot-03/devices/{deviceid}/commands', commands)
+        return result
+
+    def set_temp_value_v2(self, deviceid: str, temp_value: int):
+        """Sets a device temperature"""
+        commands = {
+            "commands":[
+                {
+                    "code":"temp_value_v2",
+                    "value": temp_value
+                }
+            ]
+        }
+        result = self.openapi.post(f'/v1.0/iot-03/devices/{deviceid}/commands', commands)
+        return result
+
+    def set_work_mode(self, deviceid: str, work_mode: str):
+        """Sets a device work mode (white, colour, scene, music"""
+        commands = {
+            "commands":[
+                {
+                    "code":"work_mode",
+                    "value": work_mode
+                }
+            ]
+        }
+        result = self.openapi.post(f'/v1.0/iot-03/devices/{deviceid}/commands', commands)
+        return result
 
     def get_random_sound(self,sound_category: SoundCategory):
         match sound_category:
