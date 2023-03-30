@@ -32,17 +32,15 @@ except KeyError as e:
     print(f'Missing environment variable: {e}')
     sys.exit()
 
-try:
-    with open('devices.json','r') as file:
-        device_dict = json.load(file)
-except Exception as e:
-    print(f'Cound not retrieve devices list: {e}')
-    sys.exit()
-
-DEFAULT_DEVICE_ID = device_dict["FRONT_DOOR"]
-
 #TUYA_LOGGER.setLevel(logging.DEBUG)
 controller = LightControls(TUYA_ENDPOINT, TUYA_CLIENTID, TUYA_SECRET, TUYA_USERNAME, TUYA_PASSWORD)
+
+success = controller.load_devices()
+if not success:
+    print("Ending program, unable to load device list.")
+    sys.exit()
+
+DEFAULT_DEVICE_ID = controller.device_dict["FRONT_DOOR"]
 
 def input_handler(command: str):
     print(f"Command entered: {command}")
@@ -66,11 +64,11 @@ def input_handler(command: str):
                 MAX_LOOP = 3000
                 for i in range(1,MAX_LOOP):
                     print(f'Running flash loop. {i}/{MAX_LOOP} Press ^C to exit the loop.')
-                    device_name = random.choice(list(device_dict.keys()))
-                    result = controller.led_toggle(device_dict[device_name],False)
+                    device_name = random.choice(list(controller.device_dict.keys()))
+                    result = controller.led_toggle(controller.device_dict[device_name],False)
                     print(f'{device_name} set to powered on={False}, success={result["success"]}')
                     playsound(controller.get_random_sound(SoundCategory.ELECTRICITY))
-                    result = controller.led_toggle(device_dict[device_name],True)
+                    result = controller.led_toggle(controller.device_dict[device_name],True)
                     print(f'{device_name} set to powered on={True}, success={result["success"]}')
 
                     # result = controller.led_toggle(device_dict["CORNER"],powered_on)

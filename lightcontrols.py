@@ -32,6 +32,8 @@ class LightControls:
         self.TUYA_SECRET = TUYA_SECRET
         self.TUYA_USERNAME = TUYA_USERNAME
         self.TUYA_PASSWORD = TUYA_PASSWORD
+        
+        self.device_dict = {}
 
         self.openapi = TuyaOpenAPI(TUYA_ENDPOINT,TUYA_CLIENTID,TUYA_SECRET)
         result = self.openapi.connect(TUYA_USERNAME,TUYA_PASSWORD,1,"tuyaSmart")
@@ -44,6 +46,15 @@ class LightControls:
         commands = {'commands': [{'code': 'switch_led', 'value': led_on}]}
         result = self.openapi.post(f'/v1.0/iot-03/devices/{deviceid}/commands', commands)
         return result
+
+    def load_devices(self,device_filename='devices.json'):
+        try:
+            with open(device_filename,'r') as file:
+                self.device_dict = json.load(file)
+                return True
+        except Exception as e:
+            print(f'Cound not retrieve devices list: {e}')
+            return False
 
     def set_color_hsv(self, deviceid: str, hue: int, saturation: int, value: int):
         """Sets a devices color with HSV (Hue, Saturation, Value)"""
