@@ -1,6 +1,7 @@
 import json
 import logging
 import os
+import random
 import sys
 import time
 from playsound import playsound
@@ -43,10 +44,6 @@ DEFAULT_DEVICE_ID = device_dict["FRONT_DOOR"]
 #TUYA_LOGGER.setLevel(logging.DEBUG)
 controller = LightControls(TUYA_ENDPOINT, TUYA_CLIENTID, TUYA_SECRET, TUYA_USERNAME, TUYA_PASSWORD)
 
-def keypress_handler(key):
-    if key == Key.esc:
-        return False
-
 def input_handler(command: str):
     print(f"Command entered: {command}")
 
@@ -64,30 +61,33 @@ def input_handler(command: str):
             print(result)
 
         case "4":
+
             try:
-                for i in range(1,30):
-                    print('Running flash loop. Press ^C to exit the loop.')
-
-                    if i % 2 == 0:
-                        powered_on = False
-                    else:
-                        powered_on = True
-
-                    result = controller.led_toggle(device_dict["CORNER"],powered_on)
-                    print(f'CORNER set to powered on={powered_on}, success={result["success"]}')
+                MAX_LOOP = 3000
+                for i in range(1,MAX_LOOP):
+                    print(f'Running flash loop. {i}/{MAX_LOOP} Press ^C to exit the loop.')
+                    device_name = random.choice(list(device_dict.keys()))
+                    result = controller.led_toggle(device_dict[device_name],False)
+                    print(f'{device_name} set to powered on={False}, success={result["success"]}')
                     playsound(controller.get_random_sound(SoundCategory.ELECTRICITY))
+                    result = controller.led_toggle(device_dict[device_name],True)
+                    print(f'{device_name} set to powered on={True}, success={result["success"]}')
 
-                    result = controller.led_toggle(device_dict["FRONT_DOOR"],powered_on)
-                    print(f'FRONT_DOOR set to powered on={powered_on}, success={result["success"]}')
-                    playsound(controller.get_random_sound(SoundCategory.ELECTRICITY))
+                    # result = controller.led_toggle(device_dict["CORNER"],powered_on)
+                    # print(f'CORNER set to powered on={powered_on}, success={result["success"]}')
+                    # playsound(controller.get_random_sound(SoundCategory.ELECTRICITY))
 
-                    result = controller.led_toggle(device_dict["OFFICE"],powered_on)
-                    print(f'OFFICE set to powered on={powered_on}, success={result["success"]}')
-                    playsound(controller.get_random_sound(SoundCategory.ELECTRICITY))
+                    # result = controller.led_toggle(device_dict["FRONT_DOOR"],powered_on)
+                    # print(f'FRONT_DOOR set to powered on={powered_on}, success={result["success"]}')
+                    # playsound(controller.get_random_sound(SoundCategory.ELECTRICITY))
 
-                    result = controller.led_toggle(device_dict["MUSIC_ROOM"],powered_on)
-                    print(f'MUSIC_ROOM set to powered on={powered_on}, success={result["success"]}')
-                    playsound(controller.get_random_sound(SoundCategory.ELECTRICITY))
+                    # result = controller.led_toggle(device_dict["OFFICE"],powered_on)
+                    # print(f'OFFICE set to powered on={powered_on}, success={result["success"]}')
+                    # playsound(controller.get_random_sound(SoundCategory.ELECTRICITY))
+
+                    # result = controller.led_toggle(device_dict["MUSIC_ROOM"],powered_on)
+                    # print(f'MUSIC_ROOM set to powered on={powered_on}, success={result["success"]}')
+                    # playsound(controller.get_random_sound(SoundCategory.ELECTRICITY))
             except KeyboardInterrupt:
                 print('Ctrl-C detected, exiting loop...')
 
