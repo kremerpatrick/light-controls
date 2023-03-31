@@ -4,6 +4,7 @@ import os
 import random
 import sys
 import time
+from datetime import datetime, timedelta
 from playsound import playsound
 #from env import ENDPOINT, ACCESS_ID, ACCESS_KEY, USERNAME, PASSWORD
 from tuya_iot import (
@@ -121,7 +122,20 @@ def input_handler(command: str):
             #playsound('mp3/TttTandDemonicSquelching001.mp3',block=False)
             time.sleep(15)
             success = controller.set_all_devices("colour",1000,1000,1,1000,1000) #red
-            time.sleep(49)
+
+            start_time = datetime.now()
+            end_time = start_time + timedelta(seconds=49)
+
+            cur_time = datetime.now()
+            while end_time > cur_time:
+                print(f'End {end_time}, cur {cur_time}')
+                device_name = random.choice(list(controller.device_dict.keys()))
+                result = controller.led_toggle(controller.device_dict[device_name],True)
+                print(f'{device_name} set to powered on={False}, success={result["success"]}')
+                result = controller.led_toggle(controller.device_dict[device_name],False)
+                print(f'{device_name} set to powered on={True}, success={result["success"]}')
+                cur_time = datetime.now()
+
             success = controller.led_toggle_all(False)
             
 
