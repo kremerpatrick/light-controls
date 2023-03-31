@@ -119,6 +119,16 @@ def input_handler(command: str):
             # result = controller.set_work_mode(DEFAULT_DEVICE_ID,"white")
             # result = controller.set_bright_value_v2(DEFAULT_DEVICE_ID,1000)
             # result = controller.set_temp_value_v2(DEFAULT_DEVICE_ID,1000)
+        
+        case "9":
+            success = controller.led_toggle_all(True)
+            success = controller.set_all_devices("white",1000,1000)
+            controller.play_audio_thread('mp3/TttTandDemonicSquelching001.mp3')
+            #playsound('mp3/TttTandDemonicSquelching001.mp3',block=False)
+            time.sleep(5)
+            success = controller.led_toggle_all(False)
+            
+
             
 
 #GET: /v1.0/iot-03/devices/{device_id}/functions
@@ -132,6 +142,7 @@ def print_commands():
     print("6 - Set HSV value")
     print("7 - Device status")
     print("8 - Device reset")
+    print("9 - TTT")
 
 while True:
     print_commands()

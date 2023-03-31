@@ -4,6 +4,8 @@ import logging
 import random
 
 from enum import Enum
+from playsound import playsound
+from threading import Thread
 from tuya_iot import (
     TuyaOpenAPI,
     AuthType,
@@ -91,6 +93,18 @@ class LightControls:
         except Exception as e:
             print(f'Cound not retrieve devices list: {e}')
             return False
+
+    def play_audio_thread(self,filepath: str):
+        """Play audio file in a non-blocking thread"""
+        # https://stackoverflow.com/questions/44472162/how-can-i-play-audio-playsound-in-the-background-of-a-python-script
+        # I tried using the block=False option in playsound but it won't work on Windows because of this bug:
+        #  https://github.com/TaylorSMarks/playsound/issues/102
+        
+        def play_thread_function():
+            playsound(filepath)
+
+        play_thread = Thread(target=play_thread_function)
+        play_thread.start()
 
     def set_color_hsv(self, deviceid: str, hue: int, saturation: int, value: int):
         """Sets a devices color with HSV (Hue, Saturation, Value)"""
