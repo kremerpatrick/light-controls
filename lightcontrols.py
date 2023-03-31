@@ -59,6 +59,11 @@ class LightControls:
         """Set all devices to specified values"""
 
         all_success = True
+        if work_mode == "colour" and (hue is None or saturation is None or value is None):
+            all_success = False
+            print('Hue, saturation, and value are required if work_mode is set to colour')
+            return all_success
+
         for deviceid in self.device_dict.values():
             result = self.set_work_mode(deviceid,work_mode)
             if result["success"] == False:
@@ -70,11 +75,16 @@ class LightControls:
                 print(result)
                 all_success = False
 
-                
             result = self.set_temp_value_v2(deviceid,temp_value)
             if result["success"] == False:
                 print(result)
                 all_success = False
+            
+            if work_mode == "colour":
+                result = self.set_color_hsv(deviceid,hue,saturation,value)
+                if result["success"] == False:
+                    print(result)
+                    all_success = False
 
         return all_success
 
@@ -99,7 +109,7 @@ class LightControls:
         # https://stackoverflow.com/questions/44472162/how-can-i-play-audio-playsound-in-the-background-of-a-python-script
         # I tried using the block=False option in playsound but it won't work on Windows because of this bug:
         #  https://github.com/TaylorSMarks/playsound/issues/102
-        
+
         def play_thread_function():
             playsound(filepath)
 

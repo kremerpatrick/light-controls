@@ -122,10 +122,13 @@ def input_handler(command: str):
         
         case "9":
             success = controller.led_toggle_all(True)
-            success = controller.set_all_devices("white",1000,1000)
+            #success = controller.set_all_devices("white",1000,1000)
+            success = controller.set_all_devices("colour",1000,1000,34,1000,1000) #yellow
             controller.play_audio_thread('mp3/TttTandDemonicSquelching001.mp3')
             #playsound('mp3/TttTandDemonicSquelching001.mp3',block=False)
-            time.sleep(5)
+            time.sleep(15)
+            success = controller.set_all_devices("colour",1000,1000,1,1000,1000) #red
+            time.sleep(49)
             success = controller.led_toggle_all(False)
             
 
