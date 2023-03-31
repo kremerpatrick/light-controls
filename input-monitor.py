@@ -47,19 +47,22 @@ def input_handler(command: str):
 
     match command:
         case "1":
+            # Show device functions
             result = controller.openapi.get(f'/v1.0/iot-03/devices/{DEFAULT_DEVICE_ID}/functions')
             print(json.dumps(result,indent=4))
 
         case "2":
+            # Turn device off
             result = controller.led_toggle(DEFAULT_DEVICE_ID,False)
             print(result)
 
         case "3":
+            # Turn device on
             result = controller.led_toggle(DEFAULT_DEVICE_ID,True)
             print(result)
 
         case "4":
-
+            # Flash sequence
             success = controller.led_toggle_all(False)
             success = controller.set_all_devices("white",1000,1000)
 
@@ -74,21 +77,6 @@ def input_handler(command: str):
                     result = controller.led_toggle(controller.device_dict[device_name],False)
                     print(f'{device_name} set to powered on={True}, success={result["success"]}')
 
-                    # result = controller.led_toggle(device_dict["CORNER"],powered_on)
-                    # print(f'CORNER set to powered on={powered_on}, success={result["success"]}')
-                    # playsound(controller.get_random_sound(SoundCategory.ELECTRICITY))
-
-                    # result = controller.led_toggle(device_dict["FRONT_DOOR"],powered_on)
-                    # print(f'FRONT_DOOR set to powered on={powered_on}, success={result["success"]}')
-                    # playsound(controller.get_random_sound(SoundCategory.ELECTRICITY))
-
-                    # result = controller.led_toggle(device_dict["OFFICE"],powered_on)
-                    # print(f'OFFICE set to powered on={powered_on}, success={result["success"]}')
-                    # playsound(controller.get_random_sound(SoundCategory.ELECTRICITY))
-
-                    # result = controller.led_toggle(device_dict["MUSIC_ROOM"],powered_on)
-                    # print(f'MUSIC_ROOM set to powered on={powered_on}, success={result["success"]}')
-                    # playsound(controller.get_random_sound(SoundCategory.ELECTRICITY))
             except KeyboardInterrupt:
                 print('Ctrl-C detected, exiting loop...')
                 success = controller.led_toggle_all(True)
@@ -98,6 +86,7 @@ def input_handler(command: str):
             success = controller.set_all_devices("white",1000,0)
 
         case "5":
+            # Play a sound
             #playsound('mp3/thunder-crack-31702.mp3')
             #playsound('mp3/electricitysound001.mp3')
             #playsound('mp3/electricitysound002.mp3')
@@ -106,14 +95,17 @@ def input_handler(command: str):
             playsound(filename)
 
         case "6":
+            # Set a device HSV value
             result = controller.set_color_hsv(DEFAULT_DEVICE_ID,229,1000,1000)
             print(result)
 
         case "7":
+            # Show device status
             result = controller.get_device_status(DEFAULT_DEVICE_ID)
             print(json.dumps(result,indent=4))
 
         case "8":
+            # Reset all to white
             success = controller.led_toggle_all(False)
             success = controller.set_all_devices("white",1000,1000)
             # result = controller.set_work_mode(DEFAULT_DEVICE_ID,"white")
@@ -121,6 +113,7 @@ def input_handler(command: str):
             # result = controller.set_temp_value_v2(DEFAULT_DEVICE_ID,1000)
         
         case "9":
+            # Tipoe Through the Tulips
             success = controller.led_toggle_all(True)
             #success = controller.set_all_devices("white",1000,1000)
             success = controller.set_all_devices("colour",1000,1000,34,1000,1000) #yellow
