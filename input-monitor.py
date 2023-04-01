@@ -152,7 +152,7 @@ def print_commands():
     print("6 - Set HSV value")
     print("7 - Device status")
     print("8 - Device reset")
-    print("9 - TTT")
+    print("9 - Tiptoe Through the Tulips Flash")
 
 while True:
     print_commands()
