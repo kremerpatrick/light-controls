@@ -39,6 +39,8 @@ class LightControls:
 
         self.openapi = TuyaOpenAPI(TUYA_ENDPOINT,TUYA_CLIENTID,TUYA_SECRET)
         result = self.openapi.connect(TUYA_USERNAME,TUYA_PASSWORD,1,"tuyaSmart")
+        if result["success"] is False:
+            raise Exception(f"Connection failed with error code: {result['code']}, description: {result['msg']}")
 
     def get_device_status(self, deviceid: str):
         """Returns device status"""
