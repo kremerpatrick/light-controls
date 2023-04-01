@@ -27,7 +27,7 @@ class SoundCategory(Enum):
     THUNDER = 1
 
 class LightControls:
-
+    """A class to simplfy interacting with the Tuya REST API"""
     def __init__(self, TUYA_ENDPOINT: str, TUYA_CLIENTID: str, TUYA_SECRET: str, TUYA_USERNAME: str, TUYA_PASSWORD: str):
         self.TUYA_ENDPOINT = TUYA_ENDPOINT
         self.TUYA_CLIENTID = TUYA_CLIENTID
@@ -41,6 +41,7 @@ class LightControls:
         result = self.openapi.connect(TUYA_USERNAME,TUYA_PASSWORD,1,"tuyaSmart")
 
     def get_device_status(self, deviceid: str):
+        """Returns device status"""
         result = self.openapi.get(f'/v1.0/iot-03/devices/{deviceid}/status')
         return result
 
@@ -173,6 +174,7 @@ class LightControls:
         return result
 
     def get_random_sound(self,sound_category: SoundCategory):
+        """Select a random audio file in the /mp3 folder based on category"""
         match sound_category:
             case SoundCategory.ELECTRICITY:
                 fnames = 'mp3/electricitysound*.mp3'
