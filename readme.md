@@ -79,7 +79,7 @@ The idea behind this prorject is to have a Python program waiting for command li
 
 `input-monitor.py` contains example functions demonstrating most of the functionality in `lightcontrols.py`
 
-
+`halloween.py` is the same structure as `input-monitor.py` but contains only Halloween sequences
 
 Linux/Mac
 ```bash
