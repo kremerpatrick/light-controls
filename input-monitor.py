@@ -88,9 +88,6 @@ def input_handler(command: str):
 
         case "5":
             # Play a sound
-            #playsound('mp3/thunder-crack-31702.mp3')
-            #playsound('mp3/electricitysound001.mp3')
-            #playsound('mp3/electricitysound002.mp3')
             filename = controller.get_random_sound(SoundCategory.ELECTRICITY)
             print(filename)
             playsound(filename)
@@ -109,23 +106,23 @@ def input_handler(command: str):
             # Reset all to white
             success = controller.led_toggle_all(False)
             success = controller.set_all_devices("white",1000,1000)
-            # result = controller.set_work_mode(DEFAULT_DEVICE_ID,"white")
-            # result = controller.set_bright_value_v2(DEFAULT_DEVICE_ID,1000)
-            # result = controller.set_temp_value_v2(DEFAULT_DEVICE_ID,1000)
         
         case "9":
             # Tipoe Through the Tulips
+            # Start with yellow lighting
             success = controller.led_toggle_all(True)
-            #success = controller.set_all_devices("white",1000,1000)
             success = controller.set_all_devices("colour",1000,1000,34,1000,1000) #yellow
+
+            # Begin the song, wait for the 15 second mark, the demonic sounds start at that mark, flip lights to red
             controller.play_audio_thread('mp3/TttTandDemonicSquelching001.mp3')
-            #playsound('mp3/TttTandDemonicSquelching001.mp3',block=False)
             time.sleep(15)
             success = controller.set_all_devices("colour",1000,1000,1,1000,1000) #red
 
+            # Sound lasts for another 49 seconds
             start_time = datetime.now()
             end_time = start_time + timedelta(seconds=49)
 
+            # Blink a random light for the rest of the song
             cur_time = datetime.now()
             while end_time > cur_time:
                 print(f'End {end_time}, cur {cur_time}')
@@ -136,13 +133,9 @@ def input_handler(command: str):
                 print(f'{device_name} set to powered on={True}, success={result["success"]}')
                 cur_time = datetime.now()
 
+            # Lights out at the end
             success = controller.led_toggle_all(False)
             
-
-            
-
-#GET: /v1.0/iot-03/devices/{device_id}/functions
-
 def print_commands():
     print("1 - Show device functions")
     print("2 - Turn device off")
@@ -159,9 +152,3 @@ while True:
     cmd = input('Enter command, x to exit: ')
     if cmd == "x": break
     input_handler(cmd)
-
-
-
-# flag = not flag
-# commands = {'commands': [{'code': 'switch_led', 'value': flag}]}
-# openapi.post('/v1.0/iot-03/devices/{}/commands'.format(DEVICE_ID), commands)
